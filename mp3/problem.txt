@@ -1,0 +1,28 @@
+(define (problem searchandrescue) (:domain letsgoo)
+(:objects
+p1 - person p2 - person 
+l0-0 - location l0-1 - location l0-2 - location l0-3 - location l0-4 - location l0-5 - location l0-6 - location 
+l1-0 - location l1-1 - location l1-2 - location l1-3 - location l1-4 - location l1-5 - location l1-6 - location 
+l2-0 - location l2-1 - location l2-2 - location l2-3 - location l2-4 - location l2-5 - location l2-6 - location 
+l3-0 - location l3-1 - location l3-2 - location l3-3 - location l3-4 - location l3-5 - location l3-6 - location 
+l4-0 - location l4-1 - location l4-2 - location l4-3 - location l4-4 - location l4-5 - location l4-6 - location 
+l5-0 - location l5-1 - location l5-2 - location l5-3 - location l5-4 - location l5-5 - location l5-6 - location 
+l6-0 - location l6-1 - location l6-2 - location l6-3 - location l6-4 - location l6-5 - location l6-6 - location 
+)
+(:init
+(conn l0-0 l1-0 down) (conn l0-0 l0-1 right) (is-safe l0-0) 
+(conn l0-1 l1-1 down) (conn l0-1 l0-0 left) (conn l0-1 l0-2 right) (is-safe l0-1) 
+(conn l0-2 l1-2 down) (conn l0-2 l0-1 left) (conn l0-2 l0-3 right) (is-safe l0-2) 
+(conn l0-3 l1-3 down) (conn l0-3 l0-2 left) (conn l0-3 l0-4 right) (is-safe l0-3) 
+(conn l0-4 l1-4 down) (conn l0-4 l0-3 left) (conn l0-4 l0-5 right) (is-safe l0-4) 
+(conn l0-5 l1-5 down) (conn l0-5 l0-4 left) (conn l0-5 l0-6 right) (is-safe l0-5) 
+(conn l0-6 l1-6 down) (conn l0-6 l0-5 left) (is-safe l0-6) 
+
+(conn l1-0 l0-0 up) (conn l1-0 l2-0 down) (conn l1-0 l1-1 right) (is-safe l1-0) 
+(conn l1-1 l0-1 up) (conn l1-1 l2-1 down) (conn l1-1 l1-0 left) (conn l1-1 l1-2 right) 
+(conn l1-2 l0-2 up) (conn l1-2 l2-2 down) (conn l1-2 l1-1 left) (conn l1-2 l1-3 right) (conn l1-3 l0-3 up) (conn l1-3 l2-3 down) (conn l1-3 l1-2 left) (conn l1-3 l1-4 right) (is-safe l1-3) (conn l1-4 l0-4 up) (conn l1-4 l2-4 down) (conn l1-4 l1-3 left) (conn l1-4 l1-5 right) (is-safe l1-4) (conn l1-5 l0-5 up) (conn l1-5 l2-5 down) (conn l1-5 l1-4 left) (conn l1-5 l1-6 right) (conn l1-6 l0-6 up) (conn l1-6 l2-6 down) (conn l1-6 l1-5 left) (conn l2-0 l1-0 up) (conn l2-0 l3-0 down) (conn l2-0 l2-1 right) (is-safe l2-0) (conn l2-1 l1-1 up) (conn l2-1 l3-1 down) (conn l2-1 l2-0 left) (conn l2-1 l2-2 right) (is-safe l2-1) (conn l2-2 l1-2 up) (conn l2-2 l3-2 down) (conn l2-2 l2-1 left) (conn l2-2 l2-3 right) (is-safe l2-2) (conn l2-3 l1-3 up) (conn l2-3 l3-3 down) (conn l2-3 l2-2 left) (conn l2-3 l2-4 right) (is-safe l2-3) (conn l2-4 l1-4 up) (conn l2-4 l3-4 down) (conn l2-4 l2-3 left) (conn l2-4 l2-5 right) (is-safe l2-4) (conn l2-5 l1-5 up) (conn l2-5 l3-5 down) (conn l2-5 l2-4 left) (conn l2-5 l2-6 right) (is-safe l2-5) (conn l2-6 l1-6 up) (conn l2-6 l3-6 down) (conn l2-6 l2-5 left) (is-safe l2-6) (conn l3-0 l2-0 up) (conn l3-0 l4-0 down) (conn l3-0 l3-1 right) (is-safe l3-0) (conn l3-1 l2-1 up) (conn l3-1 l4-1 down) (conn l3-1 l3-0 left) (conn l3-1 l3-2 right) (is-safe l3-1) (conn l3-2 l2-2 up) (conn l3-2 l4-2 down) (conn l3-2 l3-1 left) (conn l3-2 l3-3 right) (conn l3-3 l2-3 up) (conn l3-3 l4-3 down) (conn l3-3 l3-2 left) (conn l3-3 l3-4 right) (is-safe l3-3) (conn l3-4 l2-4 up) (conn l3-4 l4-4 down) (conn l3-4 l3-3 left) (conn l3-4 l3-5 right) (is-safe l3-4) (conn l3-5 l2-5 up) (conn l3-5 l4-5 down) (conn l3-5 l3-4 left) (conn l3-5 l3-6 right) (is-safe l3-5) (conn l3-6 l2-6 up) (conn l3-6 l4-6 down) (conn l3-6 l3-5 left) (is-safe l3-6) (conn l4-0 l3-0 up) (conn l4-0 l5-0 down) (conn l4-0 l4-1 right) (is-safe l4-0) (conn l4-1 l3-1 up) (conn l4-1 l5-1 down) (conn l4-1 l4-0 left) (conn l4-1 l4-2 right) (is-safe l4-1) (conn l4-2 l3-2 up) (conn l4-2 l5-2 down) (conn l4-2 l4-1 left) (conn l4-2 l4-3 right) (conn l4-3 l3-3 up) (conn l4-3 l5-3 down) (conn l4-3 l4-2 left) (conn l4-3 l4-4 right) (is-safe l4-3) (conn l4-4 l3-4 up) (conn l4-4 l5-4 down) (conn l4-4 l4-3 left) (conn l4-4 l4-5 right) (conn l4-5 l3-5 up) (conn l4-5 l5-5 down) (conn l4-5 l4-4 left) (conn l4-5 l4-6 right) (is-safe l4-5) (conn l4-6 l3-6 up) (conn l4-6 l5-6 down) (conn l4-6 l4-5 left) (is-safe l4-6) (conn l5-0 l4-0 up) (conn l5-0 l6-0 down) (conn l5-0 l5-1 right) (is-safe l5-0) (conn l5-1 l4-1 up) (conn l5-1 l6-1 down) (conn l5-1 l5-0 left) (conn l5-1 l5-2 right) (is-safe l5-1) (conn l5-2 l4-2 up) (conn l5-2 l6-2 down) (conn l5-2 l5-1 left) (conn l5-2 l5-3 right) (is-safe l5-2) (conn l5-3 l4-3 up) (conn l5-3 l6-3 down) (conn l5-3 l5-2 left) (conn l5-3 l5-4 right) (is-safe l5-3) (conn l5-4 l4-4 up) (conn l5-4 l6-4 down) (conn l5-4 l5-3 left) (conn l5-4 l5-5 right) (is-safe l5-4) (conn l5-5 l4-5 up) (conn l5-5 l6-5 down) (conn l5-5 l5-4 left) (conn l5-5 l5-6 right) (conn l5-6 l4-6 up) (conn l5-6 l6-6 down) (conn l5-6 l5-5 left) (is-safe l5-6) (conn l6-0 l5-0 up) (conn l6-0 l6-1 right) (is-safe l6-0) (conn l6-1 l5-1 up) (conn l6-1 l6-0 left) (conn l6-1 l6-2 right) (conn l6-2 l5-2 up) (conn l6-2 l6-1 left) (conn l6-2 l6-3 right) (is-safe l6-2) (conn l6-3 l5-3 up) (conn l6-3 l6-2 left) (conn l6-3 l6-4 right) (is-safe l6-3) (conn l6-4 l5-4 up) (conn l6-4 l6-3 left) (conn l6-4 l6-5 right) (conn l6-5 l5-5 up) (conn l6-5 l6-4 left) (conn l6-5 l6-6 right) (is-safe l6-5) (conn l6-6 l5-6 up) (conn l6-6 l6-5 left) (is-safe l6-6) 
+
+(person-on p1 l4-0) (person-on p2 l6-0) (hands-free agent) (on l0-0)
+)
+(:goal (and (person-on p1 l6-6) (person-on p2 l6-6)))
+)
