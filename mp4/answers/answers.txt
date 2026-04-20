@@ -1,0 +1,90 @@
+1.
+
+i)
+The components of a state are:
+* MxN possible robot locations
+* 2 possible values for carried_patient
+* 2^(MxN) possible values for the state of the fire grid
+
+This gives a total size of MxN * 2^(MxN + 1), which is enormous. If we approached this with dynamic programming, at every relevant t we would need to calculate the optimal path for each of these states, which is infeasible.
+
+ii)
+
+We will calculate P(Fij^(t+1) given F^(t)). Let F_neighs be the random sub-matrix of F^(t) containing the neighbors of cell i, j and the cell i, j. Let F_realized (or F_r for short) be a matrix with the same size as F_neighs, filled with either 0 or 1. Denote {0, 1}^|F_neighs| the set of all such matrices. Let Ki'j' = W[i' - i + 1, j' - j + 1].
+
+Now, using the formulas given in the problem:
+P(Fij^(t+1) given F^(t)) = P(Fij^(t+1) given F_neighs) 
+= sum_{Fr in {0, 1}^|F_neighs|} P(F_neighs = F_r) * sum_{i', j' indices into F_neighs} Ki'j' F_r i'j' = 
+= sum_{Fr in {0, 1}^|F_neighs|} sum_{i', j' indices into F_neighs} P(F_neighs = F_r) Ki'j' F_r i'j' = 
+= sum_{i', j' indices into F_neighs} sum_{Fr in {0, 1}^|F_neighs|}  P(F_neighs = F_r) Ki'j' F_r i'j' = 
+
+Since F_r i'j' in {0, 1}:
+
+P(Fij^(t+1) given F_neighs) = 
+= sum_{i', j' indices into F_neighs} Ki'j' sum_{Fr in {0, 1}^|F_neighs| such that Fr i'j' = 1} P(F_neighs = F_r) = 
+= sum_{i', j' indices into F_neighs} Ki'j' F(t)_neighbor i'j' of ij =
+= element-wise multiply of K and F_neighs
+
+Hence P(F(t+1) given F(t)) = W convolve P(F(t))
+
+iii)
+
+Givne an inital state s_0, let path describe a series of states s1, s2, ..., sT. Then
+
+path = argmax_path P(robot survives path) = argmax_path P(robot survives at step s0->s1) * P(robot survives at step s1->s2) * ... * P(robot survives at step sT-1->T) = 
+ = argmax_path product_(i = 1, ..., T) P(robot survives at step si - 1->si) = argmax_path log(product_(i = 1, ..., T) P(robot survives at step si - 1->si)) = 
+= argmax_path sum(i = 1, ..., T) log(P(si is not on fire given s i-1) = argmax_path sum_(i = 1, ..., T) log(1 - P(onfire_i(s_i) ) = argmin_path sum_(i = 1, ..., T) -log(1 - P(onfire_i(s_i) ) = argmin_path sum_(i = 1, ..., T) c-log(1 - P(onfire_i(s_i) )
+
+We add a constant c so that log(1 - P(onfire_i(s_i) ) is not 0. Otherwise if onfire_(si) = 0, log(1)=0.
+
+iv)
+
+When the agent sees that his path to the solution is obstructed by fire, he starts pacing between two squares. Only after his path is unblocked does the agent continue moving towards the hospital.
+
+At each time step the agent searches the space of possible futures to find one where he reaches the goal. In order to do this, he has to "simulate" the behaviour of the fire, which we do by evolving the fire probability grid after every time step. When the probabilities of fire are high along the chosen path, the cost of the path explodes since -log(1-p) goes to infinity as p->1. Then, the agent prefers to choose a path that circles around safe squares until it runs out of the step budget (since the priority queue in best first search fills up with lower-cost values).
+
+2.
+
+i)
+
+The agent choses to go right and manouver around the fire. We lose the certainty that there is fire at a given spot on the map - especially as we use more steps of our step budget. We also lose the certainty that certain spots contain no fire. This makes the agent cautious and more likely to choose longer, safer paths than shorter, direct paths. 
+
+ii) 
+
+A closed loop agent would not make a long-term plan based solely on hypothetical rollouts of the system. Although our AStarAgent is not entirely open loop - before each step we make an observation and replan, the AStarAgent makes a long-term plan by simulating (in some sense. it's simulating the probabilities) the system without taking into account the actual future state. The Agent's belief could lead it to consider some paths as completely unviable because there's a high _probability_ they are unviable, whereas the actual behaviour of the system (fire) in the particular situation is such that those paths are not only viable, but also shorter.
+
+
+
+iii)
+
+If planning was very expensive, I would much prefer not to plan after every step. Similarly to the last mini-project we could take actions according to our plan and observe the environment as we do so. At each observation we calculate the likelihood that the next step on our plan is going to lead us into a fire. If this likelihood is higher than 5% (arbitrary number), we replan. The tradeoff of this strategy is that by following the original plan, we could end up in a future where the agent is completely surrounded by fire, and when he realizes he cannot take the next step, replans and simply gives up.
+
+iv) 
+
+The most-likely-outcome determinization would be bad in its own way. Consider the follwing initial state, (H represents hospital, # represents fire, a represents agent and - represents a wall; the agent is already carrying the patient):
+
+. H #
+
+# . #
+    -
+# . a
+
+# . .
+
+Let's say the agent is forced to choose between going left and going down (there's a wall on the way up). The cell on the left has 4 fire neighbors, so the most likely outcome is that it stays clear in the next step. However, the likelihood of that is 44%, which is hardly guaranteed. Since the path is shorter if he takes the action left, he chooses this step. However, it may be safer for the agent to move down until he sees how the fire develops and only then to start moving towards the goal.
+
+3.
+
+i) 
+
+The agents both choose to take the wide, spacious route, trying to avoid the potential of a future fire on their path. MCTS is more of a closed-loop agent than AStar, since it doesn't make plans far into the future. It merely tries to predict as many futures as possible and acts according to the best estimated reward of each action. In some way, it distinguishes the different possible futures better than AStar does. It can be said that AStar, by considering the probabilies of fire, "mushes together" a lot of different potential futures, not really having a clear idea of what any one of them might be.
+
+ii)
+
+The advantage of AStar is in the "mushing together" of all different futures. MCTS only knows about the futures it comes across as its performing rollouts. Therefore, if we have less rollouts, it will know less about the possible ways the MDP can play out, and it will make "less informed" decisions. On the other hand, AStar encompasses information about all possible ways the MDP can develop by condensing them into probabilities of fire at each cell.
+
+In particular, MCTS might roll out approximately an equal number of futures stemming from action right and from action down. However, many more rollouts of action right are required to gain a proper sense of the value of that action. Given a large enough rollout limit, MCTS will start realizing that action right gets higher reward and will be prioritizing rollouts for it. But with small rollout limits, the outcomes may be too noisy to realize it.
+
+iii)
+
+Depending on how dangerous (how many fire neighbors it has) the general area actually is, the value of the state might not be impacted by too much. Since n_simulations is 10, if a single bad simulation happens from a given state, the negative reward we obtain from being burned could be compensated for by the positive rewards of the remaining 9 rollouts. If the area is generally dangerous, it's more likely that all rollouts will lead to bad outcomes.
